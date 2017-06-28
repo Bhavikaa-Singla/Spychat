@@ -158,10 +158,13 @@ def read_chat_history():
     colorama.init()
     for chat in friends[read_for].chats:
         if chat.sent_by_me:
-            print "[%s] %s %s" %(chat.time.strftime("%d %B %Y"),"You said: " ,chat.message)
+            cprint("[%s]" % chat.time.strftime("%d %B %Y"), "blue")
+            cprint("%s" % "you said:", "red")
+            print "%s" % chat.message
         else:
-            print "[%s] %s said: %s" %(chat.time.strftime("%d %B %Y"),friends[read_for].name,chat.message)
-
+            cprint("[%s]" % chat.time.strftime("%d %B %Y"), "blue")
+            cprint("%s said:" % friends[read_for].name, "red")
+            print "%s" % chat.message
 
 
 
