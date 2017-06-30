@@ -1,9 +1,8 @@
 from spy_details import spy,Spy,ChatMessage,friends    #import the classes named as Spy , ChatMessage , list of friends and object spy of the Spy class from the spy_details file
 from steganography.steganography import Steganography  #import Stegnography class from stegnography module and stegnography file to encode and decode the message
 from datetime import datetime                          #import datetime file from datetime module to use date and time functions
-from termcolor import *                          #import colored file from termcolor module to print colored text
-import colorama
-from collections import Counter
+from termcolor import *                                #import all the files from termcolor module to print colored text on terminal
+import colorama                                        #import colorama file to print the colored text on terminal
 
 
 
@@ -60,6 +59,7 @@ def add_status():
 
 
 
+
 #function add_friend() is used to handle the case when user wants to add a friend
 def add_friend():
 
@@ -94,6 +94,7 @@ def add_friend():
 
 
 
+
 #select_friend() function is used to choose from the list of spy friends added by the user.
 def select_friend():
     item_no = 0
@@ -105,7 +106,9 @@ def select_friend():
     return friend_choice_position
 
 
-# send_message() function calls the select_friend() method to get which friend is to be communicated with
+
+
+#send_message() function calls the select_friend() method to get which friend is to be communicated with
 def send_message():
     friend_choice = select_friend()
     print "index = " + str(friend_choice)
@@ -114,22 +117,16 @@ def send_message():
     output_path = "output.jpg"
     text = raw_input("What do you want to say?")     # Ask the user for the secret message they want to hide.
     list_of = text.split(" ")
-    if len(list_of)>= 100:
-        print "you cross the message limit"
+    if len(list_of)>= 100:                           #to maintain the average number of words(here I take 100) spoken by a spy everytime you receive a message from a particular spy.
+        print "Message limit exceeded!Please enter text less than 100 words."
     else:
-        print "your secret message has been ready"
+        print "your secret message has been ready!"
 
         Steganography.encode(original_image,output_path,text)      # Using the Steganography library hide the message inside the image
 
         new_chat = ChatMessage(text,True)
 
         friends[friend_choice].chats.append(new_chat)
-
-
-
-
-
-
 
 
 
@@ -144,32 +141,30 @@ def read_message():
 
     new_chat = ChatMessage(secret_text,False)
 
-
     friends[sender].chats.append(new_chat)          #Append the new_chat to chats list inside the friends list for the particular friend
     print "Your secret message has been saved!" + "secret text = " + secret_text
+    list_of = secret_text.split(" ")
+    for ele in list_of:
+        if ele == "SOS" or ele == "sos" or ele == "SAVE" or ele == "save" or ele == "help" or ele == "HELP":      #If a spy sends a message with special words such as SOS or SAVE ME or HELP ,then display a message and exit the application.
+            print "Spy is in danger!"
+            exit()
 
 
 
 
-
-# read_chat_history() function is used to read the entire chat history of a particular friend
+#read_chat_history() function is used to read the entire chat history of a particular friend
 def read_chat_history():
     read_for = select_friend()
     colorama.init()
     for chat in friends[read_for].chats:
         if chat.sent_by_me:
-            cprint("[%s]" % chat.time.strftime("%d %B %Y"), "blue")
+            cprint("[%s]" % chat.time.strftime("%d %B %Y"), "blue")     #printing chat history using different colors
             cprint("%s" % "you said:", "red")
             print "%s" % chat.message
         else:
             cprint("[%s]" % chat.time.strftime("%d %B %Y"), "blue")
             cprint("%s said:" % friends[read_for].name, "red")
             print "%s" % chat.message
-
-
-
-
-
 
 
 
